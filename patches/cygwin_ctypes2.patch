@@ -1,0 +1,12 @@
+diff -ur Python-2.6.4/Lib/ctypes/__init__.py Python-2.6.4.new/Lib/ctypes/__init__.py
+--- Lib/ctypes/__init__.py	2008-08-14 21:10:48.000000000 +0200
++++ Lib/ctypes/__init__.py	2009-12-07 00:56:38.328125000 +0100
+@@ -436,7 +436,7 @@
+ if _os.name in ("nt", "ce"):
+     pythonapi = PyDLL("python dll", None, _sys.dllhandle)
+ elif _sys.platform == "cygwin":
+-    pythonapi = PyDLL("libpython%d.%d.dll" % _sys.version_info[:2])
++    pythonapi = PyDLL("cygpython%d.%d.dll" % _sys.version_info[:2])
+ else:
+     pythonapi = PyDLL(None)
+ 

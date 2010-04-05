@@ -1,0 +1,63 @@
+diff -ur Python-2.6.5/Lib/bsddb/test/test_distributed_transactions.py Python-2.6.5.new/Lib/bsddb/test/test_distributed_transactions.py
+--- Lib/bsddb/test/test_distributed_transactions.py	2008-08-31 16:00:51.000000000 +0200
++++ Lib/bsddb/test/test_distributed_transactions.py	2010-04-05 19:20:47.000000000 +0200
+@@ -35,7 +35,7 @@
+                 db.DB_INIT_TXN | db.DB_INIT_LOG | db.DB_INIT_MPOOL |
+                 db.DB_INIT_LOCK, 0666)
+         self.db = db.DB(self.dbenv)
+-        self.db.set_re_len(db.DB_XIDDATASIZE)
++        self.db.set_re_len(db.DB_GID_SIZE)
+         if must_open_db :
+             if db.version() > (4,1) :
+                 txn=self.dbenv.txn_begin()
+@@ -76,7 +76,7 @@
+     # let them be garbage collected.
+         for i in xrange(self.num_txns) :
+             txn = self.dbenv.txn_begin()
+-            gid = "%%%dd" %db.DB_XIDDATASIZE
++            gid = "%%%dd" %db.DB_GID_SIZE
+             gid = adapt(gid %i)
+             self.db.put(i, gid, txn=txn, flags=db.DB_APPEND)
+             txns.add(gid)
+diff -ur Python-2.6.5/Modules/_bsddb.c Python-2.6.5.new/Modules/_bsddb.c
+--- Modules/_bsddb.c	2010-03-01 22:08:21.000000000 +0100
++++ Modules/_bsddb.c	2010-04-05 19:21:27.000000000 +0200
+@@ -4522,7 +4522,7 @@
+         flags=DB_NEXT;  /* Prepare for next loop pass */
+         for (i=0; i<retp; i++) {
+             gid=PyBytes_FromStringAndSize((char *)(preplist[i].gid),
+-                                DB_XIDDATASIZE);
++                                DB_GID_SIZE);
+             if (!gid) {
+                 Py_DECREF(list);
+                 return NULL;
+@@ -5949,9 +5949,9 @@
+     if (!PyArg_ParseTuple(args, "s#:prepare", &gid, &gid_size))
+         return NULL;
+ 
+-    if (gid_size != DB_XIDDATASIZE) {
++    if (gid_size != DB_GID_SIZE) {
+         PyErr_SetString(PyExc_TypeError,
+-                        "gid must be DB_XIDDATASIZE bytes long");
++                        "gid must be DB_GID_SIZE bytes long");
+         return NULL;
+     }
+ 
+@@ -7098,7 +7098,7 @@
+     /* allow apps to be written using DB_RPCCLIENT on older Berkeley DB */
+     _addIntToDict(d, "DB_RPCCLIENT", DB_CLIENT);
+ #endif
+-    ADD_INT(d, DB_XA_CREATE);
++
+ 
+     ADD_INT(d, DB_CREATE);
+     ADD_INT(d, DB_NOMMAP);
+@@ -7115,7 +7115,7 @@
+     ADD_INT(d, DB_INIT_TXN);
+     ADD_INT(d, DB_JOINENV);
+ 
+-    ADD_INT(d, DB_XIDDATASIZE);
++    ADD_INT(d, DB_GID_SIZE);
+ 
+     ADD_INT(d, DB_RECOVER);
+     ADD_INT(d, DB_RECOVER_FATAL);

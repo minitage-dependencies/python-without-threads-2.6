@@ -1,0 +1,38 @@
+diff -ru Python-2.6.4/Makefile.pre.in Python-2.6.4.new/Makefile.pre.in
+--- Makefile.pre.in	2009-09-24 21:22:45.000000000 +0200
++++ Makefile.pre.in	2009-11-24 08:48:22.937500000 +0100
+@@ -159,8 +159,8 @@
+ INSTSONAME=	@INSTSONAME@
+ 
+ 
+-LIBS=		@LIBS@
+-LIBM=		@LIBM@
++LIBS=		
++LIBM=		
+ LIBC=		@LIBC@
+ SYSLIBS=	$(LIBM) $(LIBC)
+ SHLIBS=		@SHLIBS@
+diff -ru Python-2.6.4/Python/ceval.c Python-2.6.4.new/Python/ceval.c
+--- Python/ceval.c	2009-05-30 23:43:48.000000000 +0200
++++ Python/ceval.c	2009-11-23 22:34:31.334678600 +0100
+@@ -444,7 +444,7 @@
+ /* The interpreter's recursion limit */
+ 
+ #ifndef Py_DEFAULT_RECURSION_LIMIT
+-#define Py_DEFAULT_RECURSION_LIMIT 1000
++#define Py_DEFAULT_RECURSION_LIMIT 2000
+ #endif
+ static int recursion_limit = Py_DEFAULT_RECURSION_LIMIT;
+ int _Py_CheckRecursionLimit = Py_DEFAULT_RECURSION_LIMIT;
+diff -ru Python-2.6.4/configure Python-2.6.4.new/configure
+--- configure	2009-09-29 15:01:59.000000000 +0200
++++ configure	2009-11-24 01:21:47.015625000 +0100
+@@ -4113,7 +4113,7 @@
+           ;;
+     CYGWIN*)
+           LDLIBRARY='libpython$(VERSION).dll.a'
+-          DLLLIBRARY='libpython$(VERSION).dll'
++          DLLLIBRARY='cygpython$(VERSION).dll'
+           ;;
+     SunOS*)
+ 	  LDLIBRARY='libpython$(VERSION).so'

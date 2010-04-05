@@ -1,0 +1,17 @@
+--- setup.py	2008-12-27 23:32:18.566258800 -0600
++++ setup.py	2008-12-27 23:36:51.425633800 -0600
+@@ -1009,11 +1009,13 @@
+             missing.append('bsddb185')
+ 
+         # The standard Unix dbm module:
+-        if platform not in ['cygwin']:
++        if platform not in ['win32']:
+             if find_file("ndbm.h", inc_dirs, []) is not None:
+                 # Some systems have -lndbm, others don't
+                 if self.compiler.find_library_file(lib_dirs, 'ndbm'):
+                     ndbm_libs = ['ndbm']
++                elif self.compiler.find_library_file(lib_dirs, 'gdbm_compat'):
++                    ndbm_libs = ['gdbm_compat']
+                 else:
+                     ndbm_libs = []
+                 exts.append( Extension('dbm', ['dbmmodule.c'],

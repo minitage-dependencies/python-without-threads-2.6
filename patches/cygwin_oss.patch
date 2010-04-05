@@ -1,0 +1,31 @@
+--- Modules/ossaudiodev.c	2008-06-08 23:58:54.000000000 -0500
++++ Modules/ossaudiodev.c	2008-12-27 23:44:23.566258800 -0600
+@@ -841,7 +841,7 @@
+ }
+ 
+ static PyTypeObject OSSAudioType = {
+-    PyVarObject_HEAD_INIT(&PyType_Type, 0)
++    PyVarObject_HEAD_INIT(NULL, 0)
+     "ossaudiodev.oss_audio_device", /*tp_name*/
+     sizeof(oss_audio_t),        /*tp_size*/
+     0,                          /*tp_itemsize*/
+@@ -855,7 +855,7 @@
+ };
+ 
+ static PyTypeObject OSSMixerType = {
+-    PyVarObject_HEAD_INIT(&PyType_Type, 0)
++    PyVarObject_HEAD_INIT(NULL, 0)
+     "ossaudiodev.oss_mixer_device", /*tp_name*/
+     sizeof(oss_mixer_t),            /*tp_size*/
+     0,                              /*tp_itemsize*/
+--- setup.py	2008-12-27 23:37:20.081883800 -0600
++++ setup.py	2008-12-27 23:44:33.128758800 -0600
+@@ -1317,7 +1317,7 @@
+             missing.append('linuxaudiodev')
+ 
+         if platform in ('linux2', 'freebsd4', 'freebsd5', 'freebsd6',
+-                        'freebsd7', 'freebsd8'):
++                        'freebsd7', 'freebsd8', 'cygwin'):
+             exts.append( Extension('ossaudiodev', ['ossaudiodev.c']) )
+         else:
+             missing.append('ossaudiodev')

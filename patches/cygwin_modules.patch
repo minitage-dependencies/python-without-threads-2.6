@@ -1,0 +1,21 @@
+diff -ur Python-2.6.4/setup.py Python-2.6.4.windowsmodules/setup.py
+--- setup.py	2009-11-24 09:05:40.656250000 +0100
++++ setup.py	2009-11-24 10:33:05.625000000 +0100
+@@ -312,7 +312,16 @@
+         # Ensure that /usr/local is always used
+         add_dir_to_list(self.compiler.library_dirs, '/usr/local/lib')
+         add_dir_to_list(self.compiler.include_dirs, '/usr/local/include')
+-
++        # ld_run_path is set by the minitage compilation recipe !
++        if self.get_platform() == 'cygwin':
++            minitage_inc_dirs, minitage_lib_dirs = [], []
++            noecho = [(minitage_inc_dirs.append('%s/include'%a.rpartition('/lib')[0]), 
++                       minitage_lib_dirs.append('%s/lib'%a.rpartition('/lib')[0]),
++                       minitage_lib_dirs.append('%s/bin'%a.rpartition('/lib')[0]),)
++                      for a in os.environ['LD_RUN_PATH'].split(':') 
++                      if ('dependencies' in a and (a.endswith('/lib')))]
++            noecho = [add_dir_to_list(self.compiler.include_dirs, a) for a in minitage_inc_dirs]
++            noecho = [add_dir_to_list(self.compiler.library_dirs, a) for a in minitage_lib_dirs]
+         # Add paths specified in the environment variables LDFLAGS and
+         # CPPFLAGS for header and library files.
+         # We must get the values from the Makefile and not the environment
